@@ -45,15 +45,17 @@ data, file = produce_or_load(
 )
 
 @unpack bsn, grid = data
+ind = findall(bsn .== -1)
+bsn[ind] .= 1
 function print_fig(w,h,cmap)
     xg, yg = grid
     fig = Figure(resolution = (w, h))
-    ax = Axis(fig[1,1], ylabel = L"y", xlabel = L"x", yticklabelsize = 30, 
+    ax = Axis(fig[1,1], ylabel = L"\Im{z}", xlabel = L"\Re{z}", yticklabelsize = 30, 
             xticklabelsize = 30, 
             ylabelsize = 30, 
             xlabelsize = 30, 
             xticklabelfont = "cmr10", 
             yticklabelfont = "cmr10")
     heatmap!(ax, xg, yg, bsn, rasterize = 1, colormap = cmap)
-    save("basins_newton.png",fig)
+    save("basins_newton.pdf",fig)
 end

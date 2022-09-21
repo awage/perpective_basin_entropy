@@ -29,33 +29,29 @@ function makesim(di::Dict)
     return @strdict(bsn, att, grid, d, F, ω, res)
 end
 
-#F=0.3818791946308725; ω= 0.1966442953020134
-d = 0.2; F=0.27; ω=0.1;  # smooth boundary
-# ω=0.1617;F = 0.395; d = 0.15
-# ω=0.3;F = 0.1
+function print_fig(w,h,cmap, d, F, ω, res)
 
-res = 200
-params = @strdict d F ω res
+    params = @strdict d F ω res
 
-data, file = produce_or_load(
-    datadir("basins"), params, makesim;
-    prefix = "duffing", storepatch = false, suffix = "jld2", force = false
-)
+    data, file = produce_or_load(
+        datadir("basins"), params, makesim;
+        prefix = "duffing", storepatch = false, suffix = "jld2", force = false
+    )
 
 
-@unpack bsn, grid = data
+    @unpack bsn, grid = data
 
-xg, yg = grid
+    xg, yg = grid
 
-function print_fig(w,h,cmap)
     fig = Figure(resolution = (w, h))
-    ax = Axis(fig[1,1], ylabel = L"y", xlabel = L"x", yticklabelsize = 30, 
+    ax = Axis(fig[1,1], ylabel = L"\dot{x}", xlabel = L"x", yticklabelsize = 30, 
             xticklabelsize = 30, 
             ylabelsize = 30, 
             xlabelsize = 30, 
             xticklabelfont = "cmr10", 
             yticklabelfont = "cmr10")
     heatmap!(ax, xg, yg, bsn, rasterize = 1, colormap = cmap)
-    save("basins_duffing.png",fig)
+    save(string("basins_duffing", d,".pdf"),fig)
+
 end
 

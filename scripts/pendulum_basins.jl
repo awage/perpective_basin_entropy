@@ -51,9 +51,9 @@ function makesim(di::Dict)
     return @strdict(bsn, att, grid, d, F, ω, res)
 end
 
-function print_fig(w, h, cmap) 
-    d = 0.2; F = 1.3636363636363635; ω = 0.5 # Parameters for Riddled Basins
-    res = 2000
+function print_fig(w, h, cmap, d, F, ω, res) 
+    # d = 0.2; F = 1.3636363636363635; ω = 0.5 # Parameters for Riddled Basins
+    # res = 2000
     params = @strdict d F ω res
 
     data, file = produce_or_load(
@@ -64,46 +64,17 @@ function print_fig(w, h, cmap)
 
     @unpack bsn, grid = data
 
-# xg, yg = grid
     xg = range(-pi,pi,length = res)
     yg = range(-4.,4.,length = res)
 
     fig = Figure(resolution = (w, h))
-    ax = Axis(fig[1,1], ylabel = L"y", xlabel = L"x", yticklabelsize = 30, 
+    ax = Axis(fig[1,1], ylabel = L"\dot{\theta}", xlabel = L"\theta", yticklabelsize = 30, 
             xticklabelsize = 30, 
             ylabelsize = 30, 
             xlabelsize = 30, 
             xticklabelfont = "cmr10", 
             yticklabelfont = "cmr10")
     heatmap!(ax, xg, yg, bsn, rasterize = 1, colormap = cmap)
-    save("basins_pendulum.png",fig)
-
-
-
-    d = 0.2; F = 1.66; ω = 1. # Parameters for Wada Basins
-    res = 200
-    params = @strdict d F ω res
-
-    data, file = produce_or_load(
-        datadir("basins"), params, makesim;
-        prefix = "pendulum", storepatch = false, suffix = "jld2", force = false
-    )
-
-
-    @unpack bsn, grid = data
-
-# xg, yg = grid
-    xg = range(-pi,pi,length = res)
-    yg = range(-4.,4.,length = res)
-
-    fig = Figure(resolution = (w, h))
-    ax = Axis(fig[1,1], ylabel = L"y", xlabel = L"x", yticklabelsize = 30, 
-            xticklabelsize = 30, 
-            ylabelsize = 30, 
-            xlabelsize = 30, 
-            xticklabelfont = "cmr10", 
-            yticklabelfont = "cmr10")
-        
-    heatmap!(ax, xg, yg, bsn; rasterize = 1, colormap = cmap)
-    save("basins_pendulum_wada.png",fig)
+    save(string("basins_pendulum_", ω, ".pdf"),fig)
 end
+
