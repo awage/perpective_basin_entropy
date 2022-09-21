@@ -6,7 +6,6 @@ using DynamicalSystems
 using CairoMakie
 using LaTeXStrings
 using ColorSchemes
-# using Plots
 
 
 # Equations of motion:
@@ -75,6 +74,15 @@ function print_fig(w, h, cmap, d, F, ω, res)
             xticklabelfont = "cmr10", 
             yticklabelfont = "cmr10")
     heatmap!(ax, xg, yg, bsn, rasterize = 1, colormap = cmap)
-    save(string("basins_pendulum_", ω, ".pdf"),fig)
+    save(string("basins_pendulum_", ω, ".svg"),fig)
 end
 
+function get_Sb(d, F, ω, res)
+    params = @strdict d F ω res
+    data, file = produce_or_load(
+        datadir("basins"), params, makesim;
+        prefix = "pendulum", storepatch = false, suffix = "jld2", force = false
+    )
+    @unpack bsn, grid = data
+    return basin_entropy(bsn)
+end

@@ -3,6 +3,8 @@ using DrWatson
 using DynamicalSystems
 using OrdinaryDiffEq:Vern9
 using CairoMakie
+using LaTeXStrings
+
 
 @inline @inbounds function duffing(u, p, t)
     d = p[1]; F = p[2]; omega = p[3]
@@ -44,14 +46,24 @@ function print_fig(w,h,cmap, d, F, ω, res)
     xg, yg = grid
 
     fig = Figure(resolution = (w, h))
-    ax = Axis(fig[1,1], ylabel = L"\dot{x}", xlabel = L"x", yticklabelsize = 30, 
+    ax = Axis(fig[1,1], ylabel = L"$\dot{x}$", xlabel = L"x", yticklabelsize = 30, 
             xticklabelsize = 30, 
             ylabelsize = 30, 
             xlabelsize = 30, 
             xticklabelfont = "cmr10", 
             yticklabelfont = "cmr10")
     heatmap!(ax, xg, yg, bsn, rasterize = 1, colormap = cmap)
-    save(string("basins_duffing", d,".pdf"),fig)
+    save(string("basins_duffing", d,".svg"),fig)
 
+end
+
+function get_Sb(d, F, ω, res)
+    params = @strdict d F ω res
+    data, file = produce_or_load(
+        datadir("basins"), params, makesim;
+        prefix = "duffing", storepatch = false, suffix = "jld2", force = false
+    )
+    @unpack bsn, grid = data
+    return basin_entropy(bsn)
 end
 

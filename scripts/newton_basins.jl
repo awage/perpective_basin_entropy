@@ -1,8 +1,8 @@
 using DrWatson
 @quickactivate "PerspectiveFigures" # exports DynamicalSystems, GLMakie and other goodies in `src`
-
 using DynamicalSystems
 using CairoMakie
+using LaTeXStrings
 
 function newton_map(dz,z, p, n)
     f(x) = x^p[1]-1
@@ -45,17 +45,32 @@ data, file = produce_or_load(
 )
 
 @unpack bsn, grid = data
+# Remove spurious point 
 ind = findall(bsn .== -1)
 bsn[ind] .= 1
+
 function print_fig(w,h,cmap)
     xg, yg = grid
     fig = Figure(resolution = (w, h))
-    ax = Axis(fig[1,1], ylabel = L"\Im{z}", xlabel = L"\Re{z}", yticklabelsize = 30, 
+    ax = Axis(fig[1,1], ylabel = L"\Im{(z)}", xlabel = L"\Re{(z)}", yticklabelsize = 30, 
             xticklabelsize = 30, 
             ylabelsize = 30, 
             xlabelsize = 30, 
             xticklabelfont = "cmr10", 
             yticklabelfont = "cmr10")
     heatmap!(ax, xg, yg, bsn, rasterize = 1, colormap = cmap)
-    save("basins_newton.pdf",fig)
+    save("basins_newton.svg",fig)
+end
+
+
+function get_Sb(N, res)
+    params = @strdict N res
+    data, file = produce_or_load(
+        datadir("basins"), params, makesim;
+        prefix = "newton", storepatch = false, suffix = "jld2", force = false
+    )
+    @unpack bsn, grid = data
+    ind = findall(bsn .== -1)
+    bsn[ind] .= 1
+    return basin_entropy(bsn)
 end

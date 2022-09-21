@@ -46,12 +46,26 @@ yg = range(0.,2,length = res)
 
 function print_fig(w,h,cmap)
     fig = Figure(resolution = (w, h))
-    ax = Axis(fig[1,1], ylabel = L"y", xlabel = L"x", yticklabelsize = 30, 
+    ax = Axis(fig[1,1], ylabel = L"y_0", xlabel = L"x_0", yticklabelsize = 30, 
             xticklabelsize = 30, 
             ylabelsize = 30, 
             xlabelsize = 30, 
             xticklabelfont = "cmr10", 
             yticklabelfont = "cmr10")
     heatmap!(ax, xg, yg, basins, rasterize = 1, colormap = cmap)
-    save("basins_riddle_ott.png",fig)
+    save("basins_riddle_ott.svg",fig)
+end
+
+
+function get_Sb(res)
+    data, file = produce_or_load(
+        datadir("basins"), # path
+        @dict(res), # container
+        _get_basins_ott, # function
+        prefix = "basin_ott", # prefix for savename
+        force = false
+    )
+
+    @unpack basins, xg, yg = data
+    return basin_entropy(basins)
 end

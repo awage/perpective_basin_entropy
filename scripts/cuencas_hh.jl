@@ -5,7 +5,6 @@ using OrdinaryDiffEq
 using DynamicalSystems
 using CairoMakie
 using LaTeXStrings
-using ColorSchemes
 
 function henon_heiles_de(dv,v,p,t)
     x, px, y, py = v
@@ -69,7 +68,7 @@ function makesim(di::Dict)
 end
 
 
-function print_fig(w, h, cmap, E, res) 
+function print_fig(w, h, E, res) 
     params = @strdict E res
     data, file = produce_or_load(
         datadir("basins"), params, makesim;
