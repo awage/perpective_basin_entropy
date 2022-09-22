@@ -64,6 +64,7 @@ function get_Sb(d, F, ω, res)
         prefix = "duffing", storepatch = false, suffix = "jld2", force = false
     )
     @unpack bsn, grid = data
+    basins_fractal_test(bsn; ε = 10)
     return basin_entropy(bsn)
 end
 
