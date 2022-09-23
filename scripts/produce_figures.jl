@@ -5,7 +5,7 @@ using ColorSchemes
 
 cmap = ColorScheme([RGB(1,0,0), RGB(0,1,0), RGB(0,0,1)] )
 include("newton_basins.jl")
-print_fig(600, 600, cmap, N, 2000) 
+print_fig(600, 600, cmap, 3, 2000) 
 @show get_Sb(3, 1000)
 
 include("ott_basins.jl")
