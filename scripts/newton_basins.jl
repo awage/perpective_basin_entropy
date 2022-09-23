@@ -20,19 +20,26 @@ function newton_map_J(J,z0, p, n)
    return
 end
 
-function compute_basins_newton(N, res)
+function compute_basins_newton(di::Dict)
+    @unpack N, res = di
     ds = DiscreteDynamicalSystem(newton_map,[0.1, 0.2], [N] , newton_map_J)
     xg=range(-3.,3.,length = res)
     yg=range(-3.,3.,length = res)
     mapper = AttractorsViaRecurrences(ds, (xg, yg))
     bsn, att = basins_of_attraction(mapper)
-    return bsn, att, (xg,yg)
+    return @strdict(bsn, att, (xg,yg), N, res)
 end
 
-function makesim(di::Dict)
+function compute_basins_newton_zoom(di::Dict)
     @unpack N, res = di
-    bsn, att, grid = compute_basins_newton(N, res)
-    return @strdict(bsn, att, grid, N, res)
+    ds = DiscreteDynamicalSystem(newton_map,[0.1, 0.2], [N] , newton_map_J)
+    xg=range(-3.,3.,length = res)
+    yg=range(-3.,3.,length = res)
+    mapper = AttractorsViaRecurrences(ds, (xg, yg))
+    xg=range(-2.,-1.,length = res)
+    yg=range(-2.,1.,length = res)
+    bsn, att = basins_of_attraction(mapper, (xg,yg))
+    return @strdict(bsn, att, (xg,yg), N, res)
 end
 
 
@@ -42,7 +49,7 @@ function print_fig(w,h,cmap, N, res)
     params = @strdict N res
 
     data, file = produce_or_load(
-        datadir("basins"), params, makesim;
+        datadir("basins"), params, compute_basins_newton;
         prefix = "newton", storepatch = false, suffix = "jld2", force = false
     )
 
@@ -62,6 +69,30 @@ function print_fig(w,h,cmap, N, res)
             yticklabelfont = "cmr10")
     heatmap!(ax, xg, yg, bsn, rasterize = 1, colormap = cmap)
     save("../plots/basins_newton.svg",fig)
+
+    # Plot zoom piece
+
+    data, file = produce_or_load(
+        datadir("basins"), params, compute_basins_newton_zoom;
+        prefix = "newton_zoom", storepatch = false, suffix = "jld2", force = false
+    )
+
+    @unpack bsn, grid = data
+# Remove spurious point 
+    ind = findall(bsn .== -1)
+    bsn[ind] .= 1
+    xg, yg = grid
+    fig = Figure(resolution = (w, h))
+    ax = Axis(fig[1,1], ylabel = L"\Im{(z)}", xlabel = L"\Re{(z)}", 
+            aspect = AxisAspect(1.),
+            yticklabelsize = 30, 
+            xticklabelsize = 30, 
+            ylabelsize = 30, 
+            xlabelsize = 30, 
+            xticklabelfont = "cmr10", 
+            yticklabelfont = "cmr10")
+    heatmap!(ax, xg, yg, bsn, rasterize = 1, colormap = cmap)
+    save("../plots/basins_newton_zoom.svg",fig)
 end
 
 
