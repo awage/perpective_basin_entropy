@@ -31,7 +31,8 @@ function affect!(integrator)
 end
 
 
-function compute_basins_pend(d, F, ω, res)
+function compute_basins_pend(di::Dict)
+    @unpack d, F, ω, res = di
     df = ContinuousDynamicalSystem(forced_pendulum,rand(2), [d, F, ω])
     condition(u,t,integrator) = (integrator.u[1] < -π  || integrator.u[1] > π)
     cb = DiscreteCallback(condition,affect!)
@@ -41,14 +42,10 @@ function compute_basins_pend(d, F, ω, res)
     smap = stroboscopicmap(df, 2*pi/ω; diffeq)
     mapper = AttractorsViaRecurrences(smap, (xg, yg))
     bsn, att = basins_of_attraction(mapper)
-    return bsn, att, (xg,yg)
-end
-
-function makesim(di::Dict)
-    @unpack d, F, ω, res = di
-    bsn, att, grid = compute_basins_pend(d, F, ω, res)
+    grid = (xg, yg)
     return @strdict(bsn, att, grid, d, F, ω, res)
 end
+
 
 function print_fig(w, h, cmap, d, F, ω, res) 
     # d = 0.2; F = 1.3636363636363635; ω = 0.5 # Parameters for Riddled Basins
@@ -56,13 +53,13 @@ function print_fig(w, h, cmap, d, F, ω, res)
     params = @strdict d F ω res
 
     data, file = produce_or_load(
-        datadir("basins"), params, makesim;
+        datadir("basins"), params, compute_basins_pend;
         prefix = "pendulum", storepatch = false, suffix = "jld2", force = false
     )
 
 
     @unpack bsn, grid = data
-
+    xg ,yg = grid
     fig = Figure(resolution = (w, h))
     ax = Axis(fig[1,1], ylabel = L"\dot{\theta}", xlabel = L"\theta", yticklabelsize = 30, 
             xticklabelsize = 30, 

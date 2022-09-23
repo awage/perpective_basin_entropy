@@ -15,34 +15,27 @@ end
 
 
 
-function compute_basins_duffing(d, F, ω, res)
+function compute_basins_duffing(di::Dict)
+    @unpack d, F, ω, res = di
+
     ds = ContinuousDynamicalSystem(duffing, rand(2), [d, F, ω])
     xg = yg = range(-2.2,2.2,length = res)
     diffeq = (;reltol = 1e-9, alg = Vern9(), maxiters = 1e6)
     smap = stroboscopicmap(ds, 2*pi/ω; diffeq)
     mapper = AttractorsViaRecurrences(smap, (xg, yg))
     bsn, att = basins_of_attraction(mapper)
-    return bsn, att, (xg,yg)
-end
-
-function makesim(di::Dict)
-    @unpack d, F, ω, res = di
-    bsn, att, grid = compute_basins_duffing(d, F, ω, res)
+    grid = (xg,yg)
     return @strdict(bsn, att, grid, d, F, ω, res)
 end
 
+
 function print_fig(w,h,cmap, d, F, ω, res)
-
     params = @strdict d F ω res
-
     data, file = produce_or_load(
-        datadir("basins"), params, makesim;
+        datadir("basins"), params, compute_basins_duffing;
         prefix = "duffing", storepatch = false, suffix = "jld2", force = false
     )
-
-
     @unpack bsn, grid = data
-
     xg, yg = grid
 
     fig = Figure(resolution = (w, h))

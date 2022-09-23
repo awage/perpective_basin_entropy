@@ -76,7 +76,7 @@ function print_fig(w,h,cmap, N, res)
     params = @strdict N res
     data, file = produce_or_load(
         datadir("basins"), params, compute_basins_newton_zoom;
-        prefix = "newton_zoom", storepatch = false, suffix = "jld2", force = true
+        prefix = "newton_zoom", storepatch = false, suffix = "jld2", force = false
     )
 
     @unpack bsn, grid = data
@@ -111,7 +111,7 @@ function get_Sb(N, res)
 
     data, file = produce_or_load(
         datadir("basins"), params, compute_basins_newton_zoom;
-        prefix = "newton_zoom", storepatch = false, suffix = "jld2", force = true
+        prefix = "newton_zoom", storepatch = false, suffix = "jld2", force = false
     )
     @unpack bsn, grid = data
     ind = findall(bsn .== -1)
