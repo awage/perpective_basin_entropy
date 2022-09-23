@@ -25,26 +25,30 @@ function _get_basins_ott(d)
     smap = stroboscopicmap(df, 2π/ω; diffeq)
     psys = projected_integrator(smap, [1,2], [0., 0,])
     mapper = AttractorsViaRecurrences(psys, (xg, yg); horizon_limit = 10)
-    basins, att = basins_of_attraction(mapper)
+    # The mapper search on a larger grid but we can focus on a tiny part of the 
+    # phase space. (grid for recurrences and plotting are separate).   
+    xg = range(0,1.2,length=res)
+    yg = range(0.,1.2,length=res)
+    basins, att = basins_of_attraction(mapper, (xg, yg))
     return @strdict(basins, xg, yg)
 end
 
-res = 1500
-
-data, file = produce_or_load(
-    datadir("basins"), # path
-    @dict(res), # container
-    _get_basins_ott, # function
-    prefix = "basin_ott", # prefix for savename
-    force = false
-)
-
-@unpack basins, xg, yg = data
-xg = range(-2,2,length = res)
-yg = range(0.,2,length = res)
 
 
-function print_fig(w,h,cmap)
+function print_fig(w,h,cmap, res)
+
+    # res = 1500
+    data, file = produce_or_load(
+        datadir("basins"), # path
+        @dict(res), # container
+        _get_basins_ott, # function
+        prefix = "basin_ott", # prefix for savename
+        force = false
+    )
+    @unpack basins, xg, yg = data
+
+    # xg = range(-2,2,length = res)
+    # yg = range(0.,2,length = res)
     fig = Figure(resolution = (w, h))
     ax = Axis(fig[1,1], ylabel = L"y_0", xlabel = L"x_0", yticklabelsize = 30, 
             xticklabelsize = 30, 

@@ -52,7 +52,9 @@ bsn[ind] .= 1
 function print_fig(w,h,cmap)
     xg, yg = grid
     fig = Figure(resolution = (w, h))
-    ax = Axis(fig[1,1], ylabel = L"\Im{(z)}", xlabel = L"\Re{(z)}", yticklabelsize = 30, 
+    ax = Axis(fig[1,1], ylabel = L"\Im{(z)}", xlabel = L"\Re{(z)}", 
+            aspect = AxisAspect(1.),
+            yticklabelsize = 30, 
             xticklabelsize = 30, 
             ylabelsize = 30, 
             xlabelsize = 30, 

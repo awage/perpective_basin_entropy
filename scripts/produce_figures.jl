@@ -5,13 +5,13 @@ using ColorSchemes
 
 cmap = ColorScheme([RGB(1,0,0), RGB(0,1,0), RGB(0,0,1)] )
 include("newton_basins.jl")
-print_fig(600, 500, cmap) 
+print_fig(600, 600, cmap) 
 @show get_Sb(3, 2000)
 
 include("ott_basins.jl")
 cmap = ColorScheme([RGB(0,0,0), RGB(1,1,1)] )
-print_fig(600, 500, cmap) 
-@show get_Sb(1500)
+print_fig(600, 500, cmap, 1200) 
+@show get_Sb(1200)
 
 include("duffing_basins.jl")
 cmap = ColorScheme([RGB(0,0,0), RGB(1,1,1)] )
