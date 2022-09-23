@@ -57,7 +57,7 @@ function print_fig(w,h,cmap, res)
             xticklabelfont = "cmr10", 
             yticklabelfont = "cmr10")
     heatmap!(ax, xg, yg, basins, rasterize = 1, colormap = cmap)
-    save("basins_riddle_ott.svg",fig)
+    save("../plots/basins_riddle_ott.svg",fig)
 end
 
 

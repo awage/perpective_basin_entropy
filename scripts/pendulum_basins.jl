@@ -63,9 +63,6 @@ function print_fig(w, h, cmap, d, F, ω, res)
 
     @unpack bsn, grid = data
 
-    xg = range(-pi,pi,length = res)
-    yg = range(-4.,4.,length = res)
-
     fig = Figure(resolution = (w, h))
     ax = Axis(fig[1,1], ylabel = L"\dot{\theta}", xlabel = L"\theta", yticklabelsize = 30, 
             xticklabelsize = 30, 
@@ -74,7 +71,7 @@ function print_fig(w, h, cmap, d, F, ω, res)
             xticklabelfont = "cmr10", 
             yticklabelfont = "cmr10")
     heatmap!(ax, xg, yg, bsn, rasterize = 1, colormap = cmap)
-    save(string("basins_pendulum_", ω, ".svg"),fig)
+    save(string("../plots/basins_pendulum_", ω, ".svg"),fig)
 end
 
 function get_Sb(d, F, ω, res)

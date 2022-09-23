@@ -35,21 +35,21 @@ function makesim(di::Dict)
     return @strdict(bsn, att, grid, N, res)
 end
 
-res = 2000
-N = 3
-params = @strdict N res
 
-data, file = produce_or_load(
-    datadir("basins"), params, makesim;
-    prefix = "newton", storepatch = false, suffix = "jld2", force = false
-)
+function print_fig(w,h,cmap, N, res)
+    # res = 2000
+    # N = 3
+    params = @strdict N res
 
-@unpack bsn, grid = data
+    data, file = produce_or_load(
+        datadir("basins"), params, makesim;
+        prefix = "newton", storepatch = false, suffix = "jld2", force = false
+    )
+
+    @unpack bsn, grid = data
 # Remove spurious point 
-ind = findall(bsn .== -1)
-bsn[ind] .= 1
-
-function print_fig(w,h,cmap)
+    ind = findall(bsn .== -1)
+    bsn[ind] .= 1
     xg, yg = grid
     fig = Figure(resolution = (w, h))
     ax = Axis(fig[1,1], ylabel = L"\Im{(z)}", xlabel = L"\Re{(z)}", 
@@ -61,7 +61,7 @@ function print_fig(w,h,cmap)
             xticklabelfont = "cmr10", 
             yticklabelfont = "cmr10")
     heatmap!(ax, xg, yg, bsn, rasterize = 1, colormap = cmap)
-    save("basins_newton.svg",fig)
+    save("../plots/basins_newton.svg",fig)
 end
 
 

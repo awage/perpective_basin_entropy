@@ -53,7 +53,7 @@ function print_fig(w,h,cmap, d, F, ω, res)
             xticklabelfont = "cmr10", 
             yticklabelfont = "cmr10")
     heatmap!(ax, xg, yg, bsn, rasterize = 1, colormap = cmap)
-    save(string("basins_duffing", d,".svg"),fig)
+    save(string("../plots/basins_duffing", d,".svg"),fig)
 
 end
 
