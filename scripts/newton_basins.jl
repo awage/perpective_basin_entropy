@@ -37,7 +37,7 @@ function compute_basins_newton_zoom(di::Dict)
     yg=range(-3.,3.,length = res)
     mapper = AttractorsViaRecurrences(ds, (xg, yg))
     xg=range(-2.,-1.,length = res)
-    yg=range(-0.5,0.5,length = res)
+    yg=range(-0.4,0.4,length = res)
     grid = (xg,yg)
     bsn, att = basins_of_attraction(mapper, grid)
     return @strdict(bsn, att, grid, N, res)
@@ -76,7 +76,7 @@ function print_fig(w,h,cmap, N, res)
     params = @strdict N res
     data, file = produce_or_load(
         datadir("basins"), params, compute_basins_newton_zoom;
-        prefix = "newton_zoom", storepatch = false, suffix = "jld2", force = false
+        prefix = "newton_zoom", storepatch = false, suffix = "jld2", force = true
     )
 
     @unpack bsn, grid = data

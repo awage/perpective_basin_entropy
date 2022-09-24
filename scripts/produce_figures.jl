@@ -29,7 +29,7 @@ print_fig(600, 500, cmap, d, F, ω, 1000)
 @show get_Sb(d, F, ω, 1000)
 d = 0.2; F = 1.66; ω = 1. # Parameters for Wada Basins
 cmap = ColorScheme([RGB(1,0,0), RGB(0,1,0), RGB(0,0,1)] )
-print_fig(600, 500, cmap, d, F, ω, 500)
+print_fig(600, 500, cmap, d, F, ω, 1000)
 @show get_Sb(d, F, ω, 1000)
 
 include("cuencas_hh.jl")
