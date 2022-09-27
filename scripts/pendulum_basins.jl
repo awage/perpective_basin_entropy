@@ -74,7 +74,7 @@ end
 function get_Sb(d, F, ω, res)
     params = @strdict d F ω res
     data, file = produce_or_load(
-        datadir("basins"), params, makesim;
+        datadir("basins"), params, compute_basins_pend;
         prefix = "pendulum", storepatch = false, suffix = "jld2", force = false
     )
     @unpack bsn, grid = data
