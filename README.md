@@ -4,7 +4,7 @@ This code base is using the Julia Language and [DrWatson](https://juliadynamics.
 to make a reproducible scientific project named
 > PerspectiveFigures
 
-It is authored by Wagemakers.
+It is authored by Alexandre Wagemakers.
 
 To (locally) reproduce this project, do the following:
 
