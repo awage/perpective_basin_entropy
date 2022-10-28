@@ -1,5 +1,5 @@
 using DrWatson
-@quickactivate "PerspectiveFigures" # exports DynamicalSystems, GLMakie and other goodies in `src`
+@quickactivate # exports DynamicalSystems, GLMakie and other goodies in `src`
 using Colors
 using ColorSchemes
 
