@@ -1,5 +1,5 @@
 using DrWatson
-@quickactivate "PerspectiveFigures" # exports DynamicalSystems, GLMakie and other goodies in `src`
+@quickactivate 
 using DynamicalSystems
 using CairoMakie
 using LaTeXStrings
@@ -27,7 +27,8 @@ function compute_basins_newton(di::Dict)
     yg=range(-3.,3.,length = res)
     mapper = AttractorsViaRecurrences(ds, (xg, yg))
     bsn, att = basins_of_attraction(mapper)
-    return @strdict(bsn, att, (xg,yg), N, res)
+    grid = (xg,yg)
+    return @strdict(bsn, att, grid, N, res)
 end
 
 function compute_basins_newton_zoom(di::Dict)
@@ -69,7 +70,7 @@ function print_fig(w,h,cmap, N, res)
             xticklabelfont = "cmr10", 
             yticklabelfont = "cmr10")
     heatmap!(ax, xg, yg, bsn, rasterize = 1, colormap = cmap)
-    save("../plots/basins_newton.svg",fig)
+    save("basins_newton.svg",fig)
 
     # Plot zoom piece
 
@@ -94,7 +95,7 @@ function print_fig(w,h,cmap, N, res)
             xticklabelfont = "cmr10", 
             yticklabelfont = "cmr10")
     heatmap!(ax, xg, yg, bsn, rasterize = 1, colormap = cmap)
-    save("../plots/basins_newton_zoom.svg",fig)
+    save("basins_newton_zoom.svg",fig)
 end
 
 

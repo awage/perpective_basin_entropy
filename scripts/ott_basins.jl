@@ -1,5 +1,5 @@
 using DrWatson
-@quickactivate "PerspectiveFigures" # exports DynamicalSystems, GLMakie and other goodies in `src`
+@quickactivate 
 using OrdinaryDiffEq:Vern9
 using DynamicalSystems
 using CairoMakie
@@ -57,7 +57,7 @@ function print_fig(w,h,cmap, res)
             xticklabelfont = "cmr10", 
             yticklabelfont = "cmr10")
     heatmap!(ax, xg, yg, basins, rasterize = 1, colormap = cmap)
-    save("../plots/basins_riddle_ott.svg",fig)
+    save("basins_riddle_ott.svg",fig)
 end
 
 

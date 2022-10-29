@@ -68,7 +68,7 @@ function print_fig(w, h, cmap, d, F, ω, res)
             xticklabelfont = "cmr10", 
             yticklabelfont = "cmr10")
     heatmap!(ax, xg, yg, bsn, rasterize = 1, colormap = cmap)
-    save(string("../plots/basins_pendulum_", ω, ".svg"),fig)
+    save(string("basins_pendulum_", ω, ".svg"),fig)
 end
 
 function get_Sb(d, F, ω, res)
